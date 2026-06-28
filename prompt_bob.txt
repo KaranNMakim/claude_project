@@ -1,0 +1,220 @@
+Demo Flow
+Step 1 — Create the Project (2-3 min)
+Start with an empty folder.
+Prompt
+
+Create a modern responsive Travel Planner website.
+
+Technology:
+- HTML5
+- CSS3
+- JavaScript (Vanilla)
+- Bootstrap 5
+
+Project Name:
+Travel Planner
+
+Create a clean folder structure.
+
+Generate:
+
+- index.html
+- styles.css
+- script.js
+
+The landing page should include:
+
+- Hero Banner
+- Navigation Bar
+- Popular Destinations
+- Why Choose Us
+- Customer Reviews
+- Footer
+
+Use a modern travel theme with attractive colors and icons.
+
+Keep the code modular and well commented.
+
+Talk Track
+"Notice that I didn't ask Bob to write HTML. I described the business requirement."
+
+Step 2 — Improve the Landing Page (3 min)
+Customer feedback:
+"Looks nice... but it doesn't feel like a travel website."
+Prompt
+
+Enhance the landing page.
+
+Add:
+
+- A full-width hero image
+- Animated destination cards
+- Hover effects
+- Smooth scrolling
+- Responsive navigation menu
+- Call-to-action button saying "Plan Your Trip"
+
+Improve the overall UI/UX while keeping the code clean.
+
+
+Step 3 — Add Search (3 min)
+Customer:
+"Users should be able to search destinations."
+Prompt
+
+Add a search section below the hero banner.
+
+Users should be able to search destinations by:
+
+- City
+- Country
+
+Display matching destination cards dynamically using JavaScript.
+
+Include sample destination data.
+
+Do not use any backend.
+
+
+Step 4 — Add Trip Planner (5 min)
+This is where it becomes interesting.
+Prompt
+
+Add a Trip Planner section.
+
+Allow users to enter:
+
+- Destination
+- Start Date
+- End Date
+- Number of Travelers
+
+When the user clicks "Plan Trip",
+
+display a travel summary card showing:
+
+- Total Days
+- Destination
+- Travelers
+- Estimated Budget (use sample calculation)
+
+Use JavaScript only.
+
+Audience now sees an actual application.
+
+Step 5 — Requirement Change (Agile Demo) (4 min)
+Say:
+"Every real project changes."
+Customer:
+"Can we also filter by budget?"
+Prompt
+
+Enhance the Trip Planner.
+
+Add a Budget selector:
+
+- Budget
+- Standard
+- Luxury
+
+Update the estimated trip cost based on the selected budget.
+
+Use realistic calculations.
+
+Update the UI accordingly.
+
+Now you demonstrate how AI adapts to changing requirements.
+
+Step 6 — Add Favorites ❤️ (3 min)
+Prompt
+
+Allow users to mark destinations as Favorites.
+
+Requirements:
+
+- Heart icon on every destination
+- Clicking the icon adds/removes favorites
+- Store favorites in browser Local Storage
+- Show total favorite count in the navigation bar.
+
+This always impresses people.
+
+Step 7 — Dark Mode (2 min)
+Customer:
+"People travel at night too 😊"
+Prompt
+
+Add Dark Mode support.
+
+Requirements:
+
+- Toggle button in navigation bar
+- Remember the user's preference using Local Storage
+- Smooth transition between themes
+
+Very visual.
+
+Step 8 — Bug Fix Demo (5 min)
+Purposely break something.
+Examples:
+Remove
+
+<script src="script.js"></script>
+
+or
+Rename
+
+styles.css
+
+↓
+
+style.css
+
+Now ask Bob:
+
+The website is not behaving correctly.
+
+Analyze the project.
+
+Identify the issue.
+
+Explain the root cause.
+
+Fix it.
+
+Explain what you changed.
+
+This demonstrates debugging, not just generation.
+
+Step 9 — Code Review (3 min)
+Prompt
+
+Review this project as a Senior Software Engineer.
+
+Check for:
+
+- Performance
+- Accessibility
+- Responsive Design
+- Security
+- Code Quality
+- JavaScript Best Practices
+
+Suggest improvements and implement safe changes.
+
+
+Step 10 — Documentation (2 min)
+Prompt
+
+Generate project documentation.
+
+Include:
+
+- README.md
+- Folder Structure
+- Technologies Used
+- Features
+- Setup Instructions
+- Future Enhancements
+
+Write the documentation for developers joining this project.

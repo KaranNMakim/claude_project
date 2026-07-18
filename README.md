@@ -2,8 +2,9 @@
 
 [![Run on Replit](https://replit.com/badge/github/KaranNMakim/claude_project)](https://replit.com/new/github/KaranNMakim/claude_project)
 
-**Live on Replit:** <https://replit.com/@karanmakim1/claudeproject>
-(hosted instance runs in read-only mode — see below)
+**Live demo:** <https://claudeproject--karanmakim1.replit.app>
+(read-only — dry-runs and the schema-watcher demo still work) ·
+[Replit workspace](https://replit.com/@karanmakim1/claudeproject)
 
 A working implementation of the agent taxonomy from *"Next-Generation Data
 Engineering Powered by Agentic AI"* over a Revenue Growth Management dataset
@@ -39,7 +40,10 @@ public instance):
 | `MALDE_READ_ONLY=1` | Blocks every DB-mutating endpoint with HTTP 403: heal **Apply**, pipeline **apply mode**, and **Reset DB**. Dry-runs, profiling, quality suite, RCA and the ERD all still work. The UI shows a 🔒 read-only badge and disables the blocked buttons. |
 | `MALDE_ALLOW_DEMO=1` | In read-only mode, re-enables only the "Simulate new table / alter / drop" buttons — they touch a scratch staging table, so the schema-watcher showcase stays interactive without exposing real data to edits. Unset it to lock those down too. |
 
-Running locally without these vars set, everything is enabled.
+Running locally without these vars set, everything is enabled. On a **Replit
+deployment** (`REPLIT_DEPLOYMENT` is set), both default to **on** even if the
+vars are missing, so a published instance is never writable by accident —
+set `MALDE_READ_ONLY=0` explicitly in the deployment's secrets to opt out.
 
 Full documentation — dataset, agent architecture, toolkit, LLM agents —
 lives in [malde/README.md](malde/README.md) and

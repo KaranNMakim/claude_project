@@ -65,12 +65,19 @@ WATCH_INTERVAL_S = 3.0
 # MALDE_ALLOW_DEMO=1 re-enables ONLY the demo schema-change buttons (they
 #                    touch a scratch staging table, so the watcher showcase
 #                    still works on a public instance)
-def _envflag(name: str) -> bool:
-    return os.environ.get(name, "").strip().lower() in ("1", "true", "yes")
+# When the vars are UNSET and we detect a Replit *deployment* (public URL),
+# both default to on — a published instance is never writable by accident.
+_IS_REPLIT_DEPLOYMENT = bool(os.environ.get("REPLIT_DEPLOYMENT"))
 
 
-READ_ONLY = _envflag("MALDE_READ_ONLY")
-DEMO_ENABLED = (not READ_ONLY) or _envflag("MALDE_ALLOW_DEMO")
+def _envflag(name: str, default: bool = False) -> bool:
+    v = os.environ.get(name, "").strip().lower()
+    return default if v == "" else v in ("1", "true", "yes")
+
+
+READ_ONLY = _envflag("MALDE_READ_ONLY", default=_IS_REPLIT_DEPLOYMENT)
+DEMO_ENABLED = (not READ_ONLY) or _envflag("MALDE_ALLOW_DEMO",
+                                           default=_IS_REPLIT_DEPLOYMENT)
 
 
 def guard_write(what: str):

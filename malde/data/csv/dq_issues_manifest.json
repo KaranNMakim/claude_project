@@ -1,0 +1,70 @@
+[
+  {
+    "table": "fact_sales",
+    "issue_type": "duplicate_rows",
+    "description": "Duplicate rows on business grain (date_key,product_key,retailer_key,region_key) with distinct sales_id -- simulates an ETL double-load.",
+    "n_rows": 2597,
+    "sample_keys": null
+  },
+  {
+    "table": "fact_sales",
+    "issue_type": "missing_values",
+    "description": "NULL avg_selling_price_eur.",
+    "n_rows": 6518,
+    "sample_keys": null
+  },
+  {
+    "table": "fact_sales",
+    "issue_type": "range_violation",
+    "description": "Negative units_sold (impossible value).",
+    "n_rows": 1955,
+    "sample_keys": null
+  },
+  {
+    "table": "fact_sales",
+    "issue_type": "statistical_outlier",
+    "description": "Extreme unit spikes (15-25x).",
+    "n_rows": 325,
+    "sample_keys": null
+  },
+  {
+    "table": "fact_sales",
+    "issue_type": "referential_integrity",
+    "description": "product_key=9999 has no matching row in dim_product.",
+    "n_rows": 40,
+    "sample_keys": [
+      9999
+    ]
+  },
+  {
+    "table": "dim_product",
+    "issue_type": "value_inconsistency",
+    "description": "Category encoded as both 'Carbonated Soft Drinks' and 'CSD'.",
+    "n_rows": 4,
+    "sample_keys": null
+  },
+  {
+    "table": "dim_retailer",
+    "issue_type": "missing_values",
+    "description": "One retailer has NULL country_hq.",
+    "n_rows": 1,
+    "sample_keys": null
+  },
+  {
+    "table": "fact_finance",
+    "issue_type": "business_rule_violation",
+    "description": "trade_investment_eur exceeds gross_revenue_eur (impossible spend).",
+    "n_rows": 25,
+    "sample_keys": null
+  },
+  {
+    "table": "fact_sales",
+    "issue_type": "completeness_gap",
+    "description": "Missing weeks [202320, 202321, 202322, 202323] for product 1005 at retailer 100.",
+    "n_rows": 0,
+    "sample_keys": [
+      1005,
+      100
+    ]
+  }
+]

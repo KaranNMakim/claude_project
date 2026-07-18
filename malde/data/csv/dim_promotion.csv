@@ -1,0 +1,8 @@
+promo_key,promo_name,promo_mechanic,funding_type,typical_discount_depth_pct,promo_objective
+200,TPR (Temp Price Reduction),Price,Off-invoice,0.15,Loyalty
+201,Feature (Flyer/Leaflet),Feature,Off-invoice,0.2,Seasonal
+202,Display (Gondola End),Display,Off-invoice,0.1,Cannibalisation Defence
+203,Feature + Display,Feature+Display,Off-invoice,0.25,Loyalty
+204,Multibuy (3-for-2),Multibuy,On-invoice,0.33,Trial
+205,Loyalty Points x3,Loyalty,On-invoice,0.08,Seasonal
+206,Everyday Low Price,EDLP,On-invoice,0.05,Seasonal

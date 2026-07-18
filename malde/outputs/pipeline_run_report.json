@@ -1,0 +1,131 @@
+{
+  "run_started_utc": "2026-07-18T17:52:34.490801+00:00",
+  "mode": "apply",
+  "discovery": {
+    "n_tables": 8,
+    "n_columns": 89,
+    "semantic_roles": {
+      "identifier.primary_key": 8,
+      "temporal.date": 3,
+      "attribute.categorical_code": 8,
+      "measure.numeric": 6,
+      "identifier.foreign_key": 15,
+      "attribute.categorical": 26,
+      "attribute.boolean_flag": 4,
+      "measure.percentage": 4,
+      "measure.currency_eur": 15
+    }
+  },
+  "quality_findings_before": {
+    "critical": 1,
+    "high": 4,
+    "medium": 4,
+    "low": 4
+  },
+  "n_findings_before": 13,
+  "rca_top": {
+    "finding": {
+      "check": "referential_integrity",
+      "table": "fact_sales",
+      "column": "product_key",
+      "severity": "critical",
+      "count": 40,
+      "detail": "40 rows in fact_sales.product_key have no match in dim_product.product_key",
+      "sample": [
+        9999
+      ],
+      "rule_id": "DQ-REFINT"
+    },
+    "upstream_relationships": [
+      {
+        "from_table": "fact_sales",
+        "from_column": "promo_key",
+        "to_table": "dim_promotion",
+        "to_column": "promo_key",
+        "source": "declared"
+      },
+      {
+        "from_table": "fact_sales",
+        "from_column": "region_key",
+        "to_table": "dim_region",
+        "to_column": "region_key",
+        "source": "declared"
+      },
+      {
+        "from_table": "fact_sales",
+        "from_column": "retailer_key",
+        "to_table": "dim_retailer",
+        "to_column": "retailer_key",
+        "source": "declared"
+      },
+      {
+        "from_table": "fact_sales",
+        "from_column": "product_key",
+        "to_table": "dim_product",
+        "to_column": "product_key",
+        "source": "declared"
+      },
+      {
+        "from_table": "fact_sales",
+        "from_column": "date_key",
+        "to_table": "dim_date",
+        "to_column": "date_key",
+        "source": "declared"
+      }
+    ],
+    "hypothesis": "Parent dimension row missing or fact loaded before dimension (load-order / late-arriving dim)."
+  },
+  "healing_actions": [
+    {
+      "finding": "referential_integrity",
+      "tool": "heal_quarantine_orphans",
+      "result": {
+        "action": "quarantine_orphans",
+        "dry_run": false,
+        "quarantined": 40
+      }
+    },
+    {
+      "finding": "uniqueness",
+      "tool": "heal_deduplicate",
+      "result": {
+        "action": "deduplicate",
+        "table": "fact_sales",
+        "dry_run": false,
+        "deleted": 2597
+      }
+    },
+    {
+      "finding": "range_validity",
+      "tool": "heal_fix_negative_units",
+      "result": {
+        "action": "fix_negative_units",
+        "dry_run": false,
+        "updated": 1945
+      }
+    },
+    {
+      "finding": "completeness",
+      "tool": "heal_impute_price",
+      "result": {
+        "action": "impute_price",
+        "dry_run": false,
+        "updated": 6492
+      }
+    },
+    {
+      "finding": "value_consistency",
+      "tool": "heal_standardise_category",
+      "result": {
+        "action": "standardise_category",
+        "dry_run": false,
+        "updated": 4
+      }
+    }
+  ],
+  "quality_findings_after": {
+    "high": 2,
+    "medium": 2
+  },
+  "n_findings_after": 4
+}

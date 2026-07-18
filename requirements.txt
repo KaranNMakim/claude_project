@@ -1,0 +1,6 @@
+# MALDE Control Tower — minimal deps for the dashboard + deterministic agents.
+# (The optional LangGraph LLM agents have extra deps: see malde/requirements.txt)
+pandas>=2.0
+numpy>=1.24
+fastapi>=0.110
+uvicorn[standard]>=0.29

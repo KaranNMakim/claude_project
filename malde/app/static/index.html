@@ -1,0 +1,688 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MALDE Control Tower</title>
+<style>
+  :root {
+    --page:        #f9f9f7;
+    --surface:     #fcfcfb;
+    --ink:         #0b0b0b;
+    --ink-2:       #52514e;
+    --muted:       #898781;
+    --grid:        #e1e0d9;
+    --baseline:    #c3c2b7;
+    --border:      rgba(11,11,11,0.10);
+    --accent:      #2a78d6;
+    --accent-soft: #cde2fb;
+    --sev-critical:#d03b3b;
+    --sev-high:    #ec835a;
+    --sev-medium:  #fab219;
+    --sev-low:     #2a78d6;
+    --good:        #0ca30c;
+    --good-text:   #006300;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --page:        #0d0d0d;
+      --surface:     #1a1a19;
+      --ink:         #ffffff;
+      --ink-2:       #c3c2b7;
+      --muted:       #898781;
+      --grid:        #2c2c2a;
+      --baseline:    #383835;
+      --border:      rgba(255,255,255,0.10);
+      --accent:      #3987e5;
+      --accent-soft: #104281;
+      --good-text:   #0ca30c;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--page); color: var(--ink);
+    font: 14px/1.45 system-ui, -apple-system, "Segoe UI", sans-serif;
+  }
+  button {
+    font: inherit; color: var(--ink); background: var(--surface);
+    border: 1px solid var(--border); border-radius: 8px;
+    padding: 6px 12px; cursor: pointer;
+  }
+  button:hover { border-color: var(--accent); }
+  button.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+  button.danger  { background: var(--sev-critical); border-color: var(--sev-critical); color: #fff; }
+  button:disabled { opacity: .45; cursor: not-allowed; }
+  code { font-family: ui-monospace, Consolas, monospace; font-size: 12.5px; }
+
+  header {
+    display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+    padding: 14px 22px; background: var(--surface);
+    border-bottom: 1px solid var(--grid);
+    position: sticky; top: 0; z-index: 20;
+  }
+  header h1 { font-size: 17px; margin: 0; font-weight: 650; }
+  header h1 span { color: var(--muted); font-weight: 400; }
+  .badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    border: 1px solid var(--border); border-radius: 999px;
+    padding: 3px 10px; font-size: 12px; color: var(--ink-2);
+    background: var(--page);
+  }
+  .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--good); }
+  .dot.off { background: var(--muted); }
+  .spacer { flex: 1; }
+
+  nav { display: flex; gap: 2px; padding: 0 22px; background: var(--surface);
+        border-bottom: 1px solid var(--grid); }
+  nav button {
+    border: none; background: none; border-radius: 0;
+    padding: 10px 14px; color: var(--ink-2);
+    border-bottom: 2px solid transparent;
+  }
+  nav button.active { color: var(--ink); border-bottom-color: var(--accent); font-weight: 600; }
+
+  main { padding: 20px 22px 60px; max-width: 1280px; margin: 0 auto; }
+  .tab { display: none; }
+  .tab.active { display: block; }
+
+  .cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 12px; }
+  .card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 12px; padding: 14px 16px;
+  }
+  .card .label { font-size: 12px; color: var(--muted); }
+  .card .value { font-size: 26px; font-weight: 650; margin-top: 2px; }
+  .card .sub   { font-size: 12px; color: var(--ink-2); margin-top: 2px; }
+
+  .panel {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 12px; padding: 16px 18px; margin-top: 16px;
+  }
+  .panel h2 { font-size: 14px; margin: 0 0 10px; font-weight: 650; }
+  .panel h2 .hint { font-weight: 400; color: var(--muted); font-size: 12px; }
+
+  .two-col { display: grid; grid-template-columns: 1.6fr 1fr; gap: 16px; align-items: start; }
+  @media (max-width: 900px) { .two-col { grid-template-columns: 1fr; } }
+
+  /* severity bars */
+  .sevrow { display: grid; grid-template-columns: 70px 1fr 34px; gap: 10px;
+            align-items: center; margin: 8px 0; }
+  .sevrow .name { font-size: 12.5px; color: var(--ink-2); }
+  .sevrow .track { height: 14px; background: var(--page); border-radius: 4px; }
+  .sevrow .bar { height: 14px; border-radius: 4px; min-width: 2px;
+                 transition: width .4s ease; }
+  .sevrow .n { font-variant-numeric: tabular-nums; text-align: right; font-size: 12.5px; }
+
+  .chip {
+    display: inline-flex; align-items: center; gap: 5px;
+    font-size: 11.5px; font-weight: 600; border-radius: 999px;
+    padding: 2px 9px; color: #fff;
+  }
+  .chip.low { background: var(--sev-low); }
+  .chip.medium { background: var(--sev-medium); color: #0b0b0b; }
+  .chip.high { background: var(--sev-high); color: #0b0b0b; }
+  .chip.critical { background: var(--sev-critical); }
+  .chip.ghost { background: var(--page); color: var(--ink-2); border: 1px solid var(--border); }
+
+  table.data { width: 100%; border-collapse: collapse; font-size: 13px; }
+  table.data th {
+    text-align: left; color: var(--muted); font-weight: 600; font-size: 11.5px;
+    text-transform: uppercase; letter-spacing: .04em;
+    padding: 6px 10px; border-bottom: 1px solid var(--grid);
+  }
+  table.data td { padding: 7px 10px; border-bottom: 1px solid var(--grid);
+                  vertical-align: top; }
+  table.data tr:hover td { background: color-mix(in srgb, var(--accent) 6%, transparent); }
+  table.data td.num { font-variant-numeric: tabular-nums; text-align: right; }
+  .scroll-x { overflow-x: auto; }
+  .clickable { cursor: pointer; }
+
+  /* event feed */
+  .feed { display: flex; flex-direction: column; gap: 8px; max-height: 520px; overflow-y: auto; }
+  .evt {
+    border-left: 3px solid var(--baseline); background: var(--page);
+    border-radius: 6px; padding: 7px 10px; font-size: 12.5px;
+  }
+  .evt .t { color: var(--muted); font-size: 11px; float: right; }
+  .evt .k { font-weight: 650; }
+  .evt.schema { border-left-color: var(--sev-medium); }
+  .evt.pipeline { border-left-color: var(--accent); }
+  .evt.heal { border-left-color: var(--good); }
+  .evt.error { border-left-color: var(--sev-critical); }
+  .evt pre { margin: 4px 0 0; white-space: pre-wrap; color: var(--ink-2);
+             font-size: 11.5px; }
+
+  /* pipeline phase tracker */
+  .phases { display: flex; gap: 8px; flex-wrap: wrap; }
+  .phase {
+    flex: 1; min-width: 130px; border: 1px solid var(--border);
+    border-radius: 10px; padding: 10px 12px; background: var(--page);
+  }
+  .phase .name { font-size: 12px; color: var(--muted); }
+  .phase .st { font-weight: 650; margin-top: 2px; font-size: 13px; }
+  .phase.running { border-color: var(--accent); }
+  .phase.running .st { color: var(--accent); }
+  .phase.done .st { color: var(--good-text); }
+
+  .toolgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(310px, 1fr)); gap: 12px; }
+  .toolcard { border: 1px solid var(--border); border-radius: 12px;
+              padding: 14px 16px; background: var(--surface); }
+  .toolcard h3 { margin: 0 0 4px; font-size: 13.5px; }
+  .toolcard p { margin: 0 0 10px; color: var(--ink-2); font-size: 12.5px; }
+  .toolcard .res { background: var(--page); border-radius: 8px; padding: 8px 10px;
+                   margin-top: 10px; font-size: 12px; }
+  .toolcard .res code { white-space: pre-wrap; }
+
+  iframe#erdframe { width: 100%; height: 78vh; border: 1px solid var(--border);
+                    border-radius: 12px; background: #fff; }
+
+  #toast {
+    position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+    background: var(--ink); color: var(--page); border-radius: 8px;
+    padding: 9px 16px; font-size: 13px; opacity: 0; pointer-events: none;
+    transition: opacity .25s; z-index: 50; max-width: 80vw;
+  }
+  #toast.show { opacity: .95; }
+  .muted { color: var(--muted); }
+  .mt0 { margin-top: 0; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>MALDE <span>· Control Tower</span></h1>
+  <span class="badge"><span class="dot" id="watchDot"></span>
+    watcher <span id="watchState">…</span></span>
+  <span class="badge">db: <code id="activeDb">…</code></span>
+  <span class="spacer"></span>
+  <button id="btnRunDry" class="primary">▶ Run pipeline (dry-run)</button>
+  <button id="btnRunApply">▶ Run + apply fixes</button>
+  <button id="btnReset" title="Point tools back at pristine malde.db">Reset DB</button>
+</header>
+
+<nav>
+  <button data-tab="overview" class="active">Overview</button>
+  <button data-tab="catalog">Catalog</button>
+  <button data-tab="quality">Quality</button>
+  <button data-tab="healing">Self-Healing</button>
+  <button data-tab="erd">ERD</button>
+  <button data-tab="events">Events</button>
+</nav>
+
+<main>
+
+  <!-- ============ OVERVIEW ============ -->
+  <section class="tab active" id="tab-overview">
+    <div class="cards" id="statCards"></div>
+
+    <div class="panel">
+      <h2>Pipeline <span class="hint">Discovery → Quality → Self-Healing → Re-validation</span></h2>
+      <div class="phases" id="phaseTracker"></div>
+    </div>
+
+    <div class="two-col">
+      <div class="panel mt0" style="margin-top:16px">
+        <h2>Findings by severity <span class="hint" id="sevHint"></span></h2>
+        <div id="sevBars"><p class="muted">Run the quality suite to populate.</p></div>
+      </div>
+      <div class="panel mt0" style="margin-top:16px">
+        <h2>Live events <span class="hint">schema changes auto-trigger Discovery + Quality</span></h2>
+        <div style="display:flex; gap:8px; margin-bottom:10px; flex-wrap:wrap">
+          <button id="btnDemoCreate" title="Creates stg_customer_feedback in the active DB">+ Simulate new table</button>
+          <button id="btnDemoAlter">± Alter its schema</button>
+          <button id="btnDemoDrop">− Drop it</button>
+        </div>
+        <div class="feed" id="miniFeed"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CATALOG ============ -->
+  <section class="tab" id="tab-catalog">
+    <div class="two-col">
+      <div>
+        <div class="panel mt0">
+          <h2>Tables <span class="hint">click a row to profile it</span></h2>
+          <div class="scroll-x"><table class="data" id="tblTables">
+            <thead><tr><th>table</th><th style="text-align:right">rows</th>
+              <th style="text-align:right">columns</th><th>primary key</th></tr></thead>
+            <tbody></tbody></table></div>
+        </div>
+        <div class="panel">
+          <h2>Relationships <span class="hint">declared FKs + inferred join paths</span></h2>
+          <div class="scroll-x"><table class="data" id="tblRels">
+            <thead><tr><th>from</th><th>to</th><th>source</th>
+              <th style="text-align:right">overlap</th></tr></thead>
+            <tbody></tbody></table></div>
+        </div>
+      </div>
+      <div class="panel mt0" id="profilePanel">
+        <h2 id="profileTitle">Column profile</h2>
+        <p class="muted" id="profileEmpty">Select a table on the left.</p>
+        <div class="scroll-x"><table class="data" id="tblProfile" style="display:none">
+          <thead><tr><th>column</th><th style="text-align:right">null %</th>
+            <th style="text-align:right">distinct</th><th style="text-align:right">min</th>
+            <th style="text-align:right">max</th><th style="text-align:right">mean</th></tr></thead>
+          <tbody></tbody></table></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ QUALITY ============ -->
+  <section class="tab" id="tab-quality">
+    <div class="two-col">
+      <div class="panel mt0">
+        <h2>Findings
+          <span class="hint">click a row for root-cause analysis · </span>
+          <button id="btnQualityRefresh" style="font-size:12px; padding:3px 10px">↻ Re-run suite</button>
+        </h2>
+        <div class="scroll-x"><table class="data" id="tblFindings">
+          <thead><tr><th>severity</th><th>check</th><th>table</th><th>column</th>
+            <th style="text-align:right">count</th><th>detail</th></tr></thead>
+          <tbody></tbody></table></div>
+      </div>
+      <div class="panel mt0">
+        <h2>Root-cause analysis</h2>
+        <div id="rcaBody"><p class="muted">Select a finding.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ HEALING ============ -->
+  <section class="tab" id="tab-healing">
+    <div class="panel mt0">
+      <h2>Remediation playbook
+        <span class="hint">every action dry-runs first; Apply heals a working copy of the DB, never the pristine one</span></h2>
+      <div class="toolgrid" id="healGrid"></div>
+    </div>
+    <div class="panel" id="beforeAfter" style="display:none">
+      <h2>Before → after re-validation</h2>
+      <div id="beforeAfterBody"></div>
+    </div>
+  </section>
+
+  <!-- ============ ERD ============ -->
+  <section class="tab" id="tab-erd">
+    <iframe id="erdframe" title="Entity-relationship diagram"></iframe>
+  </section>
+
+  <!-- ============ EVENTS ============ -->
+  <section class="tab" id="tab-events">
+    <div class="panel mt0">
+      <h2>Event log <span class="hint">newest first · updates live over SSE</span></h2>
+      <div class="feed" id="fullFeed" style="max-height:75vh"></div>
+    </div>
+  </section>
+
+</main>
+
+<div id="toast"></div>
+
+<script>
+"use strict";
+const $ = (s) => document.querySelector(s);
+const api = async (path, opts) => {
+  const r = await fetch(path, opts);
+  if (!r.ok) throw new Error((await r.text()) || r.statusText);
+  return r.json();
+};
+const post = (path, body) => api(path, {
+  method: "POST",
+  headers: body ? { "Content-Type": "application/json" } : {},
+  body: body ? JSON.stringify(body) : undefined,
+});
+const fmt = (n) => n == null ? "—" : Number(n).toLocaleString();
+
+let toastTimer;
+function toast(msg) {
+  const t = $("#toast");
+  t.textContent = msg; t.classList.add("show");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove("show"), 3500);
+}
+
+/* ---------- tabs ---------- */
+document.querySelectorAll("nav button").forEach((b) => {
+  b.addEventListener("click", () => {
+    document.querySelectorAll("nav button").forEach((x) => x.classList.remove("active"));
+    document.querySelectorAll(".tab").forEach((x) => x.classList.remove("active"));
+    b.classList.add("active");
+    $("#tab-" + b.dataset.tab).classList.add("active");
+    if (b.dataset.tab === "erd" && !$("#erdframe").src)
+      $("#erdframe").src = "/api/erd";
+    if (b.dataset.tab === "catalog") loadCatalog();
+    if (b.dataset.tab === "quality" && !state.quality) loadQuality(false);
+  });
+});
+
+/* ---------- state ---------- */
+const state = { overview: null, quality: null, phases: {} };
+const PHASES = ["discovery", "quality", "healing", "revalidation"];
+const SEV_ORDER = ["critical", "high", "medium", "low"];
+const SEV_ICON = { critical: "⛔", high: "▲", medium: "◆", low: "●" };
+
+/* ---------- overview ---------- */
+function renderStats() {
+  const o = state.overview;
+  if (!o) return;
+  $("#activeDb").textContent = o.active_db;
+  $("#watchState").textContent = o.watcher.enabled
+    ? `polling / ${o.watcher.interval_s}s` : "off";
+  $("#watchDot").classList.toggle("off", !o.watcher.enabled);
+  const q = o.quality;
+  $("#statCards").innerHTML = `
+    <div class="card"><div class="label">Tables</div>
+      <div class="value">${o.n_tables}</div>
+      <div class="sub">${o.is_working_copy ? "working copy" : "pristine db"}</div></div>
+    <div class="card"><div class="label">Total rows</div>
+      <div class="value">${fmt(o.total_rows)}</div>
+      <div class="sub">across all tables</div></div>
+    <div class="card"><div class="label">Quality findings</div>
+      <div class="value">${q ? q.n_findings : "—"}</div>
+      <div class="sub">${q ? "from last suite run" : "not yet assessed"}</div></div>
+    <div class="card"><div class="label">Pipeline</div>
+      <div class="value" style="font-size:18px; padding-top:6px">
+        ${o.pipeline_busy ? "running…" : "idle"}</div>
+      <div class="sub">${o.last_run ? "last mode: " + o.last_run.mode : "no runs yet"}</div></div>`;
+  renderSevBars(q ? q.by_severity : null);
+}
+
+function renderSevBars(bySev) {
+  const el = $("#sevBars");
+  if (!bySev) { el.innerHTML = '<p class="muted">Run the quality suite to populate.</p>'; return; }
+  const max = Math.max(1, ...Object.values(bySev));
+  el.innerHTML = SEV_ORDER.map((s) => {
+    const n = bySev[s] || 0;
+    return `<div class="sevrow">
+      <span class="name">${SEV_ICON[s]} ${s}</span>
+      <div class="track"><div class="bar" style="width:${(100 * n / max).toFixed(1)}%;
+        background:var(--sev-${s})"></div></div>
+      <span class="n">${n}</span></div>`;
+  }).join("");
+  $("#sevHint").textContent = "";
+}
+
+function renderPhases() {
+  $("#phaseTracker").innerHTML = PHASES.map((p) => {
+    const ph = state.phases[p] || {};
+    const cls = ph.status === "running" ? "running" : ph.status === "done" ? "done" : "";
+    let st = ph.status || "idle";
+    if (ph.status === "done") {
+      if (p === "discovery" && ph.n_tables != null) st = `✓ ${ph.n_tables} tables, ${ph.n_columns} cols`;
+      else if (p === "quality" && ph.n_findings != null) st = `✓ ${ph.n_findings} findings`;
+      else if (p === "healing" && ph.n_actions != null)
+        st = `✓ ${ph.n_actions} actions (${ph.mode === "apply" ? "applied" : "planned"})`;
+      else if (p === "revalidation" && ph.findings_after != null)
+        st = `✓ ${ph.findings_before} → ${ph.findings_after}`;
+      else st = "✓ done";
+    }
+    return `<div class="phase ${cls}"><div class="name">${p}</div>
+      <div class="st">${st}</div></div>`;
+  }).join("");
+}
+
+async function loadOverview() {
+  try { state.overview = await api("/api/overview"); renderStats(); }
+  catch (e) { console.error(e); }
+}
+
+/* ---------- catalog ---------- */
+let catalogLoaded = false;
+async function loadCatalog(force) {
+  if (catalogLoaded && !force) return;
+  catalogLoaded = true;
+  const o = state.overview || await api("/api/overview");
+  const tb = $("#tblTables tbody");
+  tb.innerHTML = Object.entries(o.tables).map(([t, m]) =>
+    `<tr class="clickable" data-t="${t}"><td><code>${t}</code></td>
+     <td class="num">${fmt(m.row_count)}</td><td class="num">${m.n_columns}</td>
+     <td><code>${(m.primary_key || []).join(", ")}</code></td></tr>`).join("");
+  tb.querySelectorAll("tr").forEach((r) =>
+    r.addEventListener("click", () => loadProfile(r.dataset.t)));
+  try {
+    const rels = await api("/api/relationships");
+    const rows = [...rels.declared, ...rels.inferred];
+    $("#tblRels tbody").innerHTML = rows.map((r) =>
+      `<tr><td><code>${r.from_table}.${r.from_column}</code></td>
+       <td><code>${r.to_table}.${r.to_column}</code></td>
+       <td><span class="chip ghost">${r.source}</span></td>
+       <td class="num">${r.value_overlap != null ? (100 * r.value_overlap).toFixed(1) + "%" : "—"}</td></tr>`
+    ).join("");
+  } catch (e) { console.error(e); }
+}
+
+async function loadProfile(table) {
+  $("#profileTitle").textContent = `Column profile — ${table}`;
+  $("#profileEmpty").textContent = "Profiling…";
+  $("#profileEmpty").style.display = "";
+  $("#tblProfile").style.display = "none";
+  try {
+    const prof = await api(`/api/tables/${table}/profile`);
+    $("#tblProfile tbody").innerHTML = prof.map((c) =>
+      `<tr><td><code>${c.column}</code><div class="muted" style="font-size:11px">${c.dtype}</div></td>
+       <td class="num" ${c.null_pct > 0.5 ? 'style="color:var(--sev-high);font-weight:600"' : ""}>${c.null_pct}</td>
+       <td class="num">${fmt(c.n_distinct)}</td>
+       <td class="num">${c.min ?? "—"}</td><td class="num">${c.max ?? "—"}</td>
+       <td class="num">${c.mean ?? "—"}</td></tr>`).join("");
+    $("#profileEmpty").style.display = "none";
+    $("#tblProfile").style.display = "";
+  } catch (e) { $("#profileEmpty").textContent = "Profile failed: " + e.message; }
+}
+
+/* ---------- quality ---------- */
+async function loadQuality(refresh) {
+  $("#btnQualityRefresh").disabled = true;
+  try {
+    state.quality = await api("/api/quality" + (refresh ? "?refresh=1" : ""));
+    renderFindings();
+    renderSevBars(state.quality.by_severity);
+    loadOverview();
+  } catch (e) { toast("Quality suite failed: " + e.message); }
+  $("#btnQualityRefresh").disabled = false;
+}
+
+function renderFindings() {
+  const f = state.quality ? state.quality.findings : [];
+  $("#tblFindings tbody").innerHTML = f.map((x, i) =>
+    `<tr class="clickable" data-i="${i}">
+     <td><span class="chip ${x.severity}">${SEV_ICON[x.severity]} ${x.severity}</span></td>
+     <td><code>${x.check}</code></td><td><code>${x.table}</code></td>
+     <td><code>${x.column || "—"}</code></td>
+     <td class="num">${fmt(x.count)}</td><td>${x.detail}</td></tr>`).join("")
+    || '<tr><td colspan="6" class="muted">No findings 🎉</td></tr>';
+  document.querySelectorAll("#tblFindings tbody tr.clickable").forEach((r) =>
+    r.addEventListener("click", () => loadRCA(f[+r.dataset.i])));
+}
+
+async function loadRCA(finding) {
+  $("#rcaBody").innerHTML = '<p class="muted">Analysing…</p>';
+  try {
+    const rca = await post("/api/rca", finding);
+    const up = (rca.upstream_relationships || []).map((u) =>
+      `<li><code>${u.from_table}.${u.from_column}</code> → <code>${u.to_table}.${u.to_column}</code></li>`
+    ).join("") || "<li class='muted'>none declared</li>";
+    $("#rcaBody").innerHTML = `
+      <p><span class="chip ${finding.severity}">${finding.severity}</span>
+         <code>${finding.check}</code> on <code>${finding.table}</code></p>
+      <p><strong>Hypothesis</strong><br>${rca.hypothesis}</p>
+      <p><strong>Upstream lineage</strong></p><ul>${up}</ul>`;
+  } catch (e) { $("#rcaBody").innerHTML = `<p class="muted">RCA failed: ${e.message}</p>`; }
+}
+$("#btnQualityRefresh").addEventListener("click", () => loadQuality(true));
+
+/* ---------- healing ---------- */
+const HEAL_META = [
+  ["heal_quarantine_orphans", "Quarantine orphan facts",
+   "Moves fact_sales rows whose product_key has no dim_product parent into a quarantine table — reversible, never deleted."],
+  ["heal_deduplicate", "Deduplicate fact_sales",
+   "Removes duplicate rows on the business grain (date × product × retailer × region), keeping the lowest surrogate id."],
+  ["heal_fix_negative_units", "Repair negative units",
+   "Replaces negative units_sold with the absolute value (documented sign-error repair)."],
+  ["heal_impute_price", "Impute missing prices",
+   "Fills NULL avg_selling_price_eur from the row's own base_price_eur."],
+  ["heal_standardise_category", "Standardise category codes",
+   "Maps the inconsistent 'CSD' code back to 'Carbonated Soft Drinks'."],
+];
+
+function renderHealGrid() {
+  $("#healGrid").innerHTML = HEAL_META.map(([id, name, desc]) => `
+    <div class="toolcard" id="card-${id}">
+      <h3>${name}</h3><p>${desc}</p>
+      <button data-heal="${id}" data-dry="1">Dry-run</button>
+      <button data-heal="${id}" data-dry="0" class="primary">Apply</button>
+      <div class="res" style="display:none"></div>
+    </div>`).join("");
+  document.querySelectorAll("[data-heal]").forEach((b) =>
+    b.addEventListener("click", () => runHeal(b.dataset.heal, b.dataset.dry === "1", b)));
+}
+
+/* two-step confirmation that never blocks the page (no native dialogs) */
+function armConfirm(btn, label) {
+  if (btn.dataset.armed) { delete btn.dataset.armed; btn.textContent = btn.dataset.orig; return true; }
+  btn.dataset.armed = "1"; btn.dataset.orig = btn.textContent;
+  btn.textContent = label;
+  setTimeout(() => { if (btn.dataset.armed) { delete btn.dataset.armed; btn.textContent = btn.dataset.orig; } }, 5000);
+  return false;
+}
+
+async function runHeal(tool, dry, btn) {
+  if (!dry && btn && !armConfirm(btn, "Confirm? (heals a working copy)")) return;
+  const card = $("#card-" + tool);
+  const res = card.querySelector(".res");
+  res.style.display = ""; res.innerHTML = '<span class="muted">running…</span>';
+  try {
+    const out = await post("/api/heal/" + tool, { dry_run: dry });
+    res.innerHTML = `<span class="chip ${dry ? "ghost" : "low"}">${dry ? "PLAN" : "APPLIED"}</span>
+      <code>${JSON.stringify(out, null, 1)}</code>`;
+    if (!dry) { toast("Applied — re-run the quality suite to re-validate"); loadOverview(); }
+  } catch (e) { res.innerHTML = `<span class="muted">failed: ${e.message}</span>`; }
+}
+renderHealGrid();
+
+/* ---------- pipeline controls ---------- */
+async function runPipeline(apply, btn) {
+  if (apply && btn && !armConfirm(btn, "Confirm? (heals a working copy)")) return;
+  try {
+    state.phases = {}; renderPhases();
+    await post("/api/pipeline/run", { apply });
+    toast("Pipeline started — follow progress on the Overview tab");
+  } catch (e) { toast("Could not start: " + e.message); }
+}
+$("#btnRunDry").addEventListener("click", () => runPipeline(false));
+$("#btnRunApply").addEventListener("click", (ev) => runPipeline(true, ev.currentTarget));
+$("#btnReset").addEventListener("click", async () => {
+  await post("/api/db/reset");
+  state.quality = null; state.phases = {}; catalogLoaded = false;
+  renderPhases(); loadOverview(); toast("Reset to pristine malde.db");
+});
+$("#btnDemoCreate").addEventListener("click", async () => {
+  await post("/api/demo/create_table");
+  toast("Table created — the watcher will detect it within a few seconds");
+});
+$("#btnDemoAlter").addEventListener("click", () =>
+  post("/api/demo/alter_table").then(() => toast("Column added — watch the feed"))
+    .catch((e) => toast(e.message)));
+$("#btnDemoDrop").addEventListener("click", () =>
+  post("/api/demo/drop_table").then(() => toast("Table dropped — watch the feed")));
+
+/* ---------- events (SSE) ---------- */
+const EVT_CLASS = {
+  table_created: "schema", table_dropped: "schema", schema_changed: "schema",
+  watch_baseline: "", pipeline_started: "pipeline", pipeline_phase: "pipeline",
+  pipeline_finished: "pipeline", auto_run_started: "pipeline",
+  auto_run_finished: "pipeline", heal_result: "heal", db_switched: "heal",
+  quality_report: "pipeline", error: "error",
+};
+
+function describe(e) {
+  const p = e.payload || {};
+  switch (e.type) {
+    case "server_started": return "Server started, watching " + p.db;
+    case "watch_baseline": return `Watcher baseline set — ${p.n_tables} tables`;
+    case "table_created": return `New table <code>${p.table}</code> (${p.n_columns} columns) — triggering Discovery + Quality`;
+    case "table_dropped": return `Table <code>${p.table}</code> dropped — triggering Discovery + Quality`;
+    case "schema_changed": {
+      const bits = [];
+      if (p.columns_added?.length) bits.push("added " + p.columns_added.map(c => `<code>${c}</code>`).join(", "));
+      if (p.columns_removed?.length) bits.push("removed " + p.columns_removed.join(", "));
+      if (p.columns_altered?.length) bits.push("altered " + p.columns_altered.join(", "));
+      return `Schema change on <code>${p.table}</code>: ${bits.join("; ")}`;
+    }
+    case "auto_run_started": return "Auto-run started (" + p.reason + ")";
+    case "auto_run_finished":
+      return `Auto-run done — ${p.n_tables} tables, ${p.n_findings} findings`;
+    case "pipeline_started": return "Pipeline started (" + p.mode + ")";
+    case "pipeline_phase":
+      return `Phase <b>${p.phase}</b>: ${p.status}` +
+        (p.n_findings != null ? ` — ${p.n_findings} findings` : "") +
+        (p.findings_after != null ? ` — ${p.findings_before} → ${p.findings_after} findings` : "");
+    case "pipeline_finished":
+      return `Pipeline finished (${p.mode})` +
+        (p.findings_after != null ? ` — findings ${p.findings_before} → ${p.findings_after}` : "");
+    case "heal_result":
+      return `${p.dry_run ? "Planned" : "Applied"} <code>${p.tool}</code>`;
+    case "db_switched": return `Active DB → <code>${p.active}</code> (${p.note})`;
+    case "quality_report": return `Quality suite: ${p.n_findings} findings`;
+    case "error": return `Error in ${p.where}: ${p.message}`;
+    default: return e.type;
+  }
+}
+
+function addEventRow(e) {
+  const div = document.createElement("div");
+  div.className = "evt " + (EVT_CLASS[e.type] || "");
+  const t = new Date(e.ts).toLocaleTimeString();
+  div.innerHTML = `<span class="t">${t} · ${e.db}</span><span class="k">${describe(e)}</span>`;
+  for (const feed of [$("#miniFeed"), $("#fullFeed")]) {
+    const c = div.cloneNode(true);
+    feed.prepend(c);
+    while (feed.children.length > (feed.id === "miniFeed" ? 40 : 300))
+      feed.lastChild.remove();
+  }
+}
+
+function handleEvent(e) {
+  addEventRow(e);
+  const p = e.payload || {};
+  if (e.type === "pipeline_started" || e.type === "auto_run_started")
+    { state.phases = {}; renderPhases(); }
+  if (e.type === "pipeline_phase") { state.phases[p.phase] = p; renderPhases(); }
+  if (["pipeline_finished", "auto_run_finished", "quality_report",
+       "db_switched", "table_created", "table_dropped"].includes(e.type)) {
+    catalogLoaded = false; loadOverview();
+  }
+  if (e.type === "auto_run_finished" || e.type === "pipeline_finished") {
+    state.quality = null;
+    if ($("#tab-quality").classList.contains("active")) loadQuality(false);
+    $("#erdframe").src && ($("#erdframe").src = "/api/erd");  // regenerated
+  }
+  if (e.type === "pipeline_finished" && p.findings_after != null) {
+    $("#beforeAfter").style.display = "";
+    $("#beforeAfterBody").innerHTML =
+      `<p>Findings <b>${p.findings_before}</b> → <b style="color:var(--good-text)">${p.findings_after}</b>.
+       Remaining findings are genuine review items (real outliers, margin edge
+       cases, timeliness gaps) that self-healing deliberately leaves for humans.</p>`;
+  }
+  if (e.type === "table_created" || e.type === "schema_changed")
+    toast("Schema change detected → agents re-running");
+}
+
+let lastEventId = 0;
+function connectSSE() {
+  const es = new EventSource("/api/events?last_id=" + lastEventId);
+  es.onmessage = (m) => {
+    const e = JSON.parse(m.data);
+    lastEventId = e.id;
+    handleEvent(e);
+  };
+  es.onerror = () => { es.close(); setTimeout(connectSSE, 3000); };
+}
+
+/* ---------- boot ---------- */
+renderPhases();
+loadOverview();
+connectSSE();
+setInterval(loadOverview, 30000);
+</script>
+</body>
+</html>

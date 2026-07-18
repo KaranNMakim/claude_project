@@ -1,0 +1,167 @@
+{
+  "dataset": "NordAqua Beverages \u2014 RGM (Northern Europe, 2020-2026)",
+  "concepts": {
+    "Product": {
+      "grain": "SKU",
+      "hierarchy": [
+        "category",
+        "sub_category",
+        "brand",
+        "sub_brand",
+        "product_name"
+      ],
+      "table": "dim_product"
+    },
+    "Customer": {
+      "grain": "Account/Banner",
+      "hierarchy": [
+        "channel",
+        "sub_channel",
+        "retail_group",
+        "customer_name"
+      ],
+      "table": "dim_retailer"
+    },
+    "Geography": {
+      "grain": "Region",
+      "hierarchy": [
+        "country",
+        "region_name"
+      ],
+      "table": "dim_region"
+    },
+    "Time": {
+      "grain": "Week",
+      "hierarchy": [
+        "year",
+        "quarter",
+        "month",
+        "iso_week"
+      ],
+      "table": "dim_date"
+    },
+    "Promotion": {
+      "grain": "Mechanic/Event",
+      "hierarchy": [
+        "promo_mechanic",
+        "promo_name"
+      ],
+      "tables": [
+        "dim_promotion",
+        "fact_promotion"
+      ]
+    },
+    "Sales": {
+      "grain": "Week x SKU x Customer x Region",
+      "table": "fact_sales",
+      "measures": [
+        "units_sold",
+        "gross_sales_value_eur",
+        "incremental_units"
+      ]
+    },
+    "Finance": {
+      "grain": "Month x SKU x Customer",
+      "table": "fact_finance",
+      "measures": [
+        "net_revenue_eur",
+        "trade_investment_eur",
+        "gross_margin_eur",
+        "excise_duty_total_eur"
+      ]
+    }
+  },
+  "relationships": [
+    {
+      "from_table": "fact_finance",
+      "from_column": "retailer_key",
+      "to_table": "dim_retailer",
+      "to_column": "retailer_key",
+      "source": "declared"
+    },
+    {
+      "from_table": "fact_finance",
+      "from_column": "product_key",
+      "to_table": "dim_product",
+      "to_column": "product_key",
+      "source": "declared"
+    },
+    {
+      "from_table": "fact_promotion",
+      "from_column": "start_date_key",
+      "to_table": "dim_date",
+      "to_column": "date_key",
+      "source": "declared"
+    },
+    {
+      "from_table": "fact_promotion",
+      "from_column": "region_key",
+      "to_table": "dim_region",
+      "to_column": "region_key",
+      "source": "declared"
+    },
+    {
+      "from_table": "fact_promotion",
+      "from_column": "retailer_key",
+      "to_table": "dim_retailer",
+      "to_column": "retailer_key",
+      "source": "declared"
+    },
+    {
+      "from_table": "fact_promotion",
+      "from_column": "product_key",
+      "to_table": "dim_product",
+      "to_column": "product_key",
+      "source": "declared"
+    },
+    {
+      "from_table": "fact_promotion",
+      "from_column": "promo_key",
+      "to_table": "dim_promotion",
+      "to_column": "promo_key",
+      "source": "declared"
+    },
+    {
+      "from_table": "fact_sales",
+      "from_column": "promo_key",
+      "to_table": "dim_promotion",
+      "to_column": "promo_key",
+      "source": "declared"
+    },
+    {
+      "from_table": "fact_sales",
+      "from_column": "region_key",
+      "to_table": "dim_region",
+      "to_column": "region_key",
+      "source": "declared"
+    },
+    {
+      "from_table": "fact_sales",
+      "from_column": "retailer_key",
+      "to_table": "dim_retailer",
+      "to_column": "retailer_key",
+      "source": "declared"
+    },
+    {
+      "from_table": "fact_sales",
+      "from_column": "product_key",
+      "to_table": "dim_product",
+      "to_column": "product_key",
+      "source": "declared"
+    },
+    {
+      "from_table": "fact_sales",
+      "from_column": "date_key",
+      "to_table": "dim_date",
+      "to_column": "date_key",
+      "source": "declared"
+    }
+  ],
+  "kpis": {
+    "Net Revenue": "gross_revenue_eur - trade_investment_eur - excise_duty_total_eur",
+    "Gross Margin %": "gross_margin_eur / gross_revenue_eur",
+    "Trade Spend Ratio": "trade_investment_eur / gross_revenue_eur",
+    "Promo Uplift": "incremental_units / base_units",
+    "Price per Litre": "avg_selling_price_eur / (total_volume_ml/1000)"
+  }
+}

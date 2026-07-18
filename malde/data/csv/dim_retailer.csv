@@ -1,0 +1,12 @@
+retailer_key,customer_name,retail_group,channel,sub_channel,country_hq,loyalty_program
+100,ICA Supermarket,ICA Gruppen,Grocery,Supermarket,Sweden,0
+101,Willys,Axfood,Discount,Soft Discount,Sweden,1
+102,Coop Sverige,KF Coop,Grocery,Hypermarket,Sweden,1
+103,NorgesGruppen Meny,NorgesGruppen,Grocery,Supermarket,Norway,0
+104,Rema 1000,Reitan,Discount,Soft Discount,,1
+105,Salling Bilka,Salling Group,Grocery,Hypermarket,Denmark,1
+106,Netto DK,Salling Group,Discount,Hard Discount,Denmark,1
+107,Kesko K-Market,Kesko,Convenience,Neighbourhood,Finland,1
+108,S-Group Prisma,SOK,Grocery,Hypermarket,Finland,1
+109,Lidl Nordic,Schwarz,Discount,Hard Discount,Nordic,0
+110,nordaqua.com D2C,NordAqua,E-commerce,D2C Online,Nordic,1

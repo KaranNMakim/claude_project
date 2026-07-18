@@ -1,0 +1,90 @@
+table,column,data_type,semantic_role,business_concept,description,is_primary_key,is_foreign_key,distinct_sampled,null_pct_sampled
+dim_date,date_key,INTEGER,identifier.primary_key,Time.Week,Surrogate key for an ISO week (year*100+week).,True,False,339,0.0
+dim_date,week_start_date,TEXT,temporal.date,,,False,False,339,0.0
+dim_date,week_end_date,TEXT,temporal.date,,,False,False,339,0.0
+dim_date,iso_year,INTEGER,attribute.categorical_code,,,False,False,7,0.0
+dim_date,iso_week,INTEGER,measure.numeric,,,False,False,53,0.0
+dim_date,month,INTEGER,attribute.categorical_code,,,False,False,12,0.0
+dim_date,month_key,INTEGER,identifier.foreign_key,Time.Month,Surrogate key for a calendar month (year*100+month).,False,False,78,0.0
+dim_date,quarter,INTEGER,attribute.categorical_code,,,False,False,4,0.0
+dim_date,year,INTEGER,attribute.categorical_code,,,False,False,7,0.0
+dim_date,half,TEXT,attribute.categorical,,,False,False,2,0.0
+dim_date,season,TEXT,attribute.categorical,,,False,False,4,0.0
+dim_product,product_key,INTEGER,identifier.primary_key,Product.SKU,Surrogate key to a product/SKU.,True,False,61,0.0
+dim_product,sku_code,TEXT,attribute.categorical,,,False,False,61,0.0
+dim_product,product_name,TEXT,attribute.categorical,,,False,False,61,0.0
+dim_product,category,TEXT,attribute.categorical,Product.Category,Nielsen level-1 category.,False,False,8,0.0
+dim_product,sub_category,TEXT,attribute.categorical,Product.SubCategory,Nielsen level-2 sub-category.,False,False,17,0.0
+dim_product,brand,TEXT,attribute.categorical,Product.Brand,Brand (Nielsen level-3).,False,False,28,0.0
+dim_product,sub_brand,TEXT,attribute.categorical,,,False,False,21,0.0
+dim_product,flavour,TEXT,attribute.categorical,,,False,False,17,0.0
+dim_product,pack_type,TEXT,attribute.categorical,,,False,False,2,0.0
+dim_product,pack_description,TEXT,attribute.categorical,,,False,False,7,0.0
+dim_product,pack_size_ml,INTEGER,attribute.categorical_code,,,False,False,5,0.0
+dim_product,units_per_pack,INTEGER,attribute.categorical_code,,,False,False,3,0.0
+dim_product,total_volume_ml,INTEGER,attribute.categorical_code,,,False,False,7,0.0
+dim_product,is_sugar_free,INTEGER,attribute.boolean_flag,Product.Attribute.SugarFree,1 if sugar-free.,False,False,2,0.0
+dim_product,launch_date,TEXT,temporal.date,,,False,False,60,0.0
+dim_product,brand_owner,TEXT,attribute.categorical,,,False,False,1,0.0
+dim_promotion,promo_key,INTEGER,identifier.primary_key,Promotion.Mechanic,Surrogate key to a promotion mechanic.,True,False,7,0.0
+dim_promotion,promo_name,TEXT,attribute.categorical,,,False,False,7,0.0
+dim_promotion,promo_mechanic,TEXT,attribute.categorical,,,False,False,7,0.0
+dim_promotion,funding_type,TEXT,attribute.categorical,Promotion.Funding,On- vs off-invoice funding.,False,False,2,0.0
+dim_promotion,typical_discount_depth_pct,REAL,measure.percentage,,,False,False,7,0.0
+dim_promotion,promo_objective,TEXT,attribute.categorical,,,False,False,4,0.0
+dim_region,region_key,INTEGER,identifier.primary_key,Geography.Region,Surrogate key to a sales region.,True,False,22,0.0
+dim_region,region_name,TEXT,attribute.categorical,,,False,False,22,0.0
+dim_region,country,TEXT,attribute.categorical,,,False,False,4,0.0
+dim_region,sub_region,TEXT,attribute.categorical,,,False,False,22,0.0
+dim_region,city_tier,TEXT,attribute.categorical,,,False,False,4,0.0
+dim_region,population_band,TEXT,attribute.categorical,,,False,False,4,0.0
+dim_retailer,retailer_key,INTEGER,identifier.primary_key,Customer.Account,Surrogate key to a retail customer/banner.,True,False,11,0.0
+dim_retailer,customer_name,TEXT,attribute.categorical,Customer.Account,Retail customer / banner name.,False,False,11,0.0
+dim_retailer,retail_group,TEXT,attribute.categorical,,,False,False,10,0.0
+dim_retailer,channel,TEXT,attribute.categorical,Customer.Channel,Route to market (Grocery/Discount/...).,False,False,4,0.0
+dim_retailer,sub_channel,TEXT,attribute.categorical,Customer.SubChannel,Channel refinement (Hypermarket/...).,False,False,6,0.0
+dim_retailer,country_hq,TEXT,attribute.categorical,,,False,False,5,9.09
+dim_retailer,loyalty_program,INTEGER,attribute.categorical_code,,,False,False,2,0.0
+fact_finance,finance_id,INTEGER,identifier.primary_key,,,True,False,2000,0.0
+fact_finance,month_key,INTEGER,identifier.foreign_key,Time.Month,Surrogate key for a calendar month (year*100+month).,False,False,13,0.0
+fact_finance,product_key,INTEGER,identifier.foreign_key,Product.SKU,Surrogate key to a product/SKU.,False,True,4,0.0
+fact_finance,retailer_key,INTEGER,identifier.foreign_key,Customer.Account,Surrogate key to a retail customer/banner.,False,True,11,0.0
+fact_finance,units_sold,INTEGER,measure.numeric,Sales.Volume,Units sold in the period (KPI).,False,False,1785,0.0
+fact_finance,list_price_eur,REAL,measure.currency_eur,Price.List,"List price to trade, EUR.",False,False,1193,0.0
+fact_finance,cogs_per_unit_eur,REAL,measure.currency_eur,Finance.COGS,"Cost of goods sold per unit, EUR.",False,False,911,0.0
+fact_finance,excise_duty_per_unit_eur,REAL,measure.currency_eur,Finance.Tax.Excise,"Excise / sugar tax per unit, EUR.",False,False,15,0.0
+fact_finance,gross_revenue_eur,REAL,measure.currency_eur,Finance.GrossRevenue,"Gross revenue, EUR.",False,False,1997,0.0
+fact_finance,trade_investment_eur,REAL,measure.currency_eur,Finance.TradeSpend,"Total trade investment/spend, EUR.",False,False,1989,0.0
+fact_finance,off_invoice_spend_eur,REAL,measure.currency_eur,Finance.TradeSpend.OffInvoice,Off-invoice trade spend.,False,False,1977,0.0
+fact_finance,on_invoice_spend_eur,REAL,measure.currency_eur,Finance.TradeSpend.OnInvoice,On-invoice trade spend.,False,False,1976,0.0
+fact_finance,excise_duty_total_eur,REAL,measure.currency_eur,Finance.Tax.Excise,"Total excise duty, EUR.",False,False,1628,0.0
+fact_finance,logistics_cost_eur,REAL,measure.currency_eur,Finance.Logistics,"Logistics/distribution cost, EUR.",False,False,1951,0.0
+fact_finance,net_revenue_eur,REAL,measure.currency_eur,Finance.NetRevenue,"Net revenue after trade & excise, EUR.",False,False,1997,0.0
+fact_finance,gross_margin_eur,REAL,measure.currency_eur,Finance.GrossMargin,"Gross margin, EUR (KPI).",False,False,1997,0.0
+fact_finance,gross_margin_pct,REAL,measure.percentage,Finance.GrossMarginPct,"Gross margin %, KPI.",False,False,1459,0.0
+fact_promotion,promo_event_id,INTEGER,identifier.primary_key,,,True,False,2000,0.0
+fact_promotion,promo_key,INTEGER,identifier.foreign_key,Promotion.Mechanic,Surrogate key to a promotion mechanic.,False,True,7,0.0
+fact_promotion,product_key,INTEGER,identifier.foreign_key,Product.SKU,Surrogate key to a product/SKU.,False,True,3,0.0
+fact_promotion,retailer_key,INTEGER,identifier.foreign_key,Customer.Account,Surrogate key to a retail customer/banner.,False,True,11,0.0
+fact_promotion,region_key,INTEGER,identifier.foreign_key,Geography.Region,Surrogate key to a sales region.,False,True,6,0.0
+fact_promotion,start_date_key,INTEGER,identifier.foreign_key,,,False,True,333,0.0
+fact_promotion,end_date_key,INTEGER,identifier.foreign_key,,,False,False,335,0.0
+fact_promotion,planned_discount_pct,REAL,measure.percentage,Promotion.Depth,Planned promo discount depth.,False,False,364,0.0
+fact_promotion,promo_price_eur,REAL,measure.currency_eur,Promotion.Price,"Promoted price point, EUR.",False,False,454,0.0
+fact_promotion,planned_units,INTEGER,measure.numeric,,,False,False,1082,0.0
+fact_promotion,display_flag,INTEGER,attribute.boolean_flag,,,False,False,2,0.0
+fact_promotion,feature_flag,INTEGER,attribute.boolean_flag,,,False,False,2,0.0
+fact_sales,sales_id,INTEGER,identifier.primary_key,,,True,False,2000,0.0
+fact_sales,date_key,INTEGER,identifier.foreign_key,Time.Week,Surrogate key for an ISO week (year*100+week).,False,True,3,0.0
+fact_sales,product_key,INTEGER,identifier.foreign_key,Product.SKU,Surrogate key to a product/SKU.,False,True,1,0.0
+fact_sales,retailer_key,INTEGER,identifier.foreign_key,Customer.Account,Surrogate key to a retail customer/banner.,False,True,1,0.0
+fact_sales,region_key,INTEGER,identifier.foreign_key,Geography.Region,Surrogate key to a sales region.,False,True,1,0.0
+fact_sales,units_sold,INTEGER,measure.numeric,Sales.Volume,Units sold in the period (KPI).,False,False,468,0.0
+fact_sales,base_units,INTEGER,measure.numeric,Sales.BaseVolume,Estimated non-promoted baseline volume.,False,False,443,0.0
+fact_sales,incremental_units,INTEGER,measure.numeric,Sales.IncrementalVolume,Promo-driven uplift volume.,False,False,122,0.0
+fact_sales,gross_sales_value_eur,REAL,measure.currency_eur,Sales.GrossValue,"Gross sales value, EUR.",False,False,1558,0.0
+fact_sales,avg_selling_price_eur,REAL,measure.currency_eur,Price.ASP,"Average selling price per unit, EUR.",False,False,90,0.7
+fact_sales,base_price_eur,REAL,measure.currency_eur,Price.Base,"Non-promoted shelf price, EUR.",False,False,2,0.0
+fact_sales,promo_flag,INTEGER,attribute.boolean_flag,Promotion.OnPromo,1 if the week was on promotion.,False,False,2,0.0
+fact_sales,promo_key,INTEGER,identifier.foreign_key,Promotion.Mechanic,Surrogate key to a promotion mechanic.,False,True,7,88.65
+fact_sales,distribution_pct_acv,REAL,measure.percentage,Sales.Distribution,Weighted distribution (% ACV).,False,False,8,0.0

@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "malde-control-tower",
+      "runtimeExecutable": "py",
+      "runtimeArgs": ["malde/app/server.py"],
+      "port": 8137
+    }
+  ]
+}

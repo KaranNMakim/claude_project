@@ -1,0 +1,62 @@
+product_key,sku_code,product_name,category,sub_category,brand,sub_brand,flavour,pack_type,pack_description,pack_size_ml,units_per_pack,total_volume_ml,is_sugar_free,launch_date,brand_owner
+1000,SKU1000,NordCola PET 500ml single,Carbonated Soft Drinks,Cola,NordCola,NordCola,Cola,PET,PET 500ml single,500,1,500,0,2021-07-24,NordAqua Beverages
+1001,SKU1001,NordCola Can 330ml single,Carbonated Soft Drinks,Cola,NordCola,NordCola,Cola,Can,Can 330ml single,330,1,330,0,2021-04-19,NordAqua Beverages
+1002,SKU1002,NordCola PET 1.5L single,CSD,Cola,NordCola,NordCola,Cola,PET,PET 1.5L single,1500,1,1500,0,2019-10-16,NordAqua Beverages
+1003,SKU1003,NordCola Zero PET 1.5L single,CSD,Cola,NordCola Zero,Zero,Cola,PET,PET 1.5L single,1500,1,1500,1,2019-01-11,NordAqua Beverages
+1004,SKU1004,NordCola Zero PET 500ml single,Carbonated Soft Drinks,Cola,NordCola Zero,Zero,Cola,PET,PET 500ml single,500,1,500,1,2022-05-14,NordAqua Beverages
+1005,SKU1005,Fjord Lemon PET 1.5L single,Carbonated Soft Drinks,Lemon-Lime,Fjord Lemon,Lemon,Lemon-Lime,PET,PET 1.5L single,1500,1,1500,0,2021-02-08,NordAqua Beverages
+1006,SKU1006,Fjord Lemon PET 1L single,Carbonated Soft Drinks,Lemon-Lime,Fjord Lemon,Lemon,Lemon-Lime,PET,PET 1L single,1000,1,1000,0,2023-01-01,NordAqua Beverages
+1007,SKU1007,Fjord Lime Can 330ml single,CSD,Lemon-Lime,Fjord Lime,Lime,Lemon-Lime,Can,Can 330ml single,330,1,330,0,2019-04-22,NordAqua Beverages
+1008,SKU1008,Fjord Lime Can 330ml 4-pack,Carbonated Soft Drinks,Lemon-Lime,Fjord Lime,Lime,Lemon-Lime,Can,Can 330ml 4-pack,330,4,1320,0,2024-07-30,NordAqua Beverages
+1009,SKU1009,Solris Orange Can 330ml single,Carbonated Soft Drinks,Orange,Solris Orange,Orange,Orange,Can,Can 330ml single,330,1,330,0,2022-09-22,NordAqua Beverages
+1010,SKU1010,Solris Orange PET 1.5L single,Carbonated Soft Drinks,Orange,Solris Orange,Orange,Orange,PET,PET 1.5L single,1500,1,1500,0,2024-06-28,NordAqua Beverages
+1011,SKU1011,Solris Orange Can 330ml 4-pack,Carbonated Soft Drinks,Orange,Solris Orange,Orange,Orange,Can,Can 330ml 4-pack,330,4,1320,0,2019-07-30,NordAqua Beverages
+1012,SKU1012,Nordic Tonic PET 1.5L single,Carbonated Soft Drinks,Mixers,Nordic Tonic,Tonic,Mixers,PET,PET 1.5L single,1500,1,1500,0,2021-08-20,NordAqua Beverages
+1013,SKU1013,Nordic Tonic Can 330ml 4-pack,CSD,Mixers,Nordic Tonic,Tonic,Mixers,Can,Can 330ml 4-pack,330,4,1320,0,2023-01-03,NordAqua Beverages
+1014,SKU1014,Nordic Ginger Can 330ml single,Carbonated Soft Drinks,Mixers,Nordic Ginger,Ginger,Mixers,Can,Can 330ml single,330,1,330,0,2019-02-25,NordAqua Beverages
+1015,SKU1015,Nordic Ginger PET 2L single,Carbonated Soft Drinks,Mixers,Nordic Ginger,Ginger,Mixers,PET,PET 2L single,2000,1,2000,0,2021-10-02,NordAqua Beverages
+1016,SKU1016,Kilde Still PET 500ml single,Water,Still Water,Kilde Still,Still,Still Water,PET,PET 500ml single,500,1,500,1,2023-05-23,NordAqua Beverages
+1017,SKU1017,Kilde Still Can 330ml single,Water,Still Water,Kilde Still,Still,Still Water,Can,Can 330ml single,330,1,330,1,2020-10-05,NordAqua Beverages
+1018,SKU1018,Kilde Sparkling PET 1.5L single,Water,Sparkling Water,Kilde Sparkling,Sparkling,Sparkling Water,PET,PET 1.5L single,1500,1,1500,1,2024-04-15,NordAqua Beverages
+1019,SKU1019,Kilde Sparkling Can 330ml 8-pack,Water,Sparkling Water,Kilde Sparkling,Sparkling,Sparkling Water,Can,Can 330ml 8-pack,330,8,2640,1,2022-10-21,NordAqua Beverages
+1020,SKU1020,Kilde Sparkling Citrus PET 1L single,Water,Sparkling Water,Kilde Sparkling Citrus,Citrus,Sparkling Water,PET,PET 1L single,1000,1,1000,1,2019-09-28,NordAqua Beverages
+1021,SKU1021,Kilde Sparkling Citrus Can 330ml single,Water,Sparkling Water,Kilde Sparkling Citrus,Citrus,Sparkling Water,Can,Can 330ml single,330,1,330,1,2022-01-19,NordAqua Beverages
+1022,SKU1022,Kilde Berry PET 500ml single,Water,Flavoured Water,Kilde Berry,Berry,Flavoured Water,PET,PET 500ml single,500,1,500,1,2019-05-02,NordAqua Beverages
+1023,SKU1023,Kilde Berry PET 2L single,Water,Flavoured Water,Kilde Berry,Berry,Flavoured Water,PET,PET 2L single,2000,1,2000,1,2022-03-04,NordAqua Beverages
+1024,SKU1024,Kilde Berry PET 1.5L single,Water,Flavoured Water,Kilde Berry,Berry,Flavoured Water,PET,PET 1.5L single,1500,1,1500,1,2019-09-21,NordAqua Beverages
+1025,SKU1025,Kilde Cucumber PET 500ml single,Water,Flavoured Water,Kilde Cucumber,Cucumber,Flavoured Water,PET,PET 500ml single,500,1,500,1,2022-06-26,NordAqua Beverages
+1026,SKU1026,Kilde Cucumber PET 1L single,Water,Flavoured Water,Kilde Cucumber,Cucumber,Flavoured Water,PET,PET 1L single,1000,1,1000,1,2021-06-24,NordAqua Beverages
+1027,SKU1027,Sunrike Orange 100 Can 330ml single,Juice & Nectars,100% Juice,Sunrike Orange 100,100,100% Juice,Can,Can 330ml single,330,1,330,0,2019-10-16,NordAqua Beverages
+1028,SKU1028,Sunrike Orange 100 Can 330ml 4-pack,Juice & Nectars,100% Juice,Sunrike Orange 100,100,100% Juice,Can,Can 330ml 4-pack,330,4,1320,0,2024-03-26,NordAqua Beverages
+1029,SKU1029,Sunrike Orange 100 PET 2L single,Juice & Nectars,100% Juice,Sunrike Orange 100,100,100% Juice,PET,PET 2L single,2000,1,2000,0,2022-02-01,NordAqua Beverages
+1030,SKU1030,Sunrike Apple 100 PET 1.5L single,Juice & Nectars,100% Juice,Sunrike Apple 100,100,100% Juice,PET,PET 1.5L single,1500,1,1500,0,2020-02-27,NordAqua Beverages
+1031,SKU1031,Sunrike Apple 100 Can 330ml 8-pack,Juice & Nectars,100% Juice,Sunrike Apple 100,100,100% Juice,Can,Can 330ml 8-pack,330,8,2640,0,2019-08-12,NordAqua Beverages
+1032,SKU1032,Sunrike Peach Nectar PET 2L single,Juice & Nectars,Nectar,Sunrike Peach Nectar,Nectar,Nectar,PET,PET 2L single,2000,1,2000,0,2022-08-03,NordAqua Beverages
+1033,SKU1033,Sunrike Peach Nectar PET 1L single,Juice & Nectars,Nectar,Sunrike Peach Nectar,Nectar,Nectar,PET,PET 1L single,1000,1,1000,0,2021-09-27,NordAqua Beverages
+1034,SKU1034,Sunrike Tropical PET 2L single,Juice & Nectars,Juice Drink,Sunrike Tropical,Tropical,Juice Drink,PET,PET 2L single,2000,1,2000,0,2019-05-14,NordAqua Beverages
+1035,SKU1035,Sunrike Tropical Can 330ml 4-pack,Juice & Nectars,Juice Drink,Sunrike Tropical,Tropical,Juice Drink,Can,Can 330ml 4-pack,330,4,1320,0,2019-09-22,NordAqua Beverages
+1036,SKU1036,Sunrike Multivitamin PET 1.5L single,Juice & Nectars,Juice Drink,Sunrike Multivitamin,Multivitamin,Juice Drink,PET,PET 1.5L single,1500,1,1500,0,2019-07-18,NordAqua Beverages
+1037,SKU1037,Sunrike Multivitamin Can 330ml single,Juice & Nectars,Juice Drink,Sunrike Multivitamin,Multivitamin,Juice Drink,Can,Can 330ml single,330,1,330,0,2019-06-04,NordAqua Beverages
+1038,SKU1038,Volt Can 330ml single,Energy Drinks,Regular Energy,Volt,Volt,Regular Energy,Can,Can 330ml single,330,1,330,0,2021-04-27,NordAqua Beverages
+1039,SKU1039,Volt Can 330ml 4-pack,Energy Drinks,Regular Energy,Volt,Volt,Regular Energy,Can,Can 330ml 4-pack,330,4,1320,0,2024-03-20,NordAqua Beverages
+1040,SKU1040,Volt Can 330ml 8-pack,Energy Drinks,Regular Energy,Volt,Volt,Regular Energy,Can,Can 330ml 8-pack,330,8,2640,0,2024-01-13,NordAqua Beverages
+1041,SKU1041,Volt Tropical Can 330ml 4-pack,Energy Drinks,Regular Energy,Volt Tropical,Tropical,Regular Energy,Can,Can 330ml 4-pack,330,4,1320,0,2021-02-15,NordAqua Beverages
+1042,SKU1042,Volt Tropical PET 2L single,Energy Drinks,Regular Energy,Volt Tropical,Tropical,Regular Energy,PET,PET 2L single,2000,1,2000,0,2022-03-17,NordAqua Beverages
+1043,SKU1043,Volt Zero PET 500ml single,Energy Drinks,Sugar-Free Energy,Volt Zero,Zero,Sugar-Free Energy,PET,PET 500ml single,500,1,500,1,2019-01-13,NordAqua Beverages
+1044,SKU1044,Volt Zero PET 2L single,Energy Drinks,Sugar-Free Energy,Volt Zero,Zero,Sugar-Free Energy,PET,PET 2L single,2000,1,2000,1,2021-02-10,NordAqua Beverages
+1045,SKU1045,Volt Zero Can 330ml 8-pack,Energy Drinks,Sugar-Free Energy,Volt Zero,Zero,Sugar-Free Energy,Can,Can 330ml 8-pack,330,8,2640,1,2024-01-14,NordAqua Beverages
+1046,SKU1046,Volt Zero Berry PET 1L single,Energy Drinks,Sugar-Free Energy,Volt Zero Berry,Berry,Sugar-Free Energy,PET,PET 1L single,1000,1,1000,1,2024-03-31,NordAqua Beverages
+1047,SKU1047,Volt Zero Berry Can 330ml 8-pack,Energy Drinks,Sugar-Free Energy,Volt Zero Berry,Berry,Sugar-Free Energy,Can,Can 330ml 8-pack,330,8,2640,1,2021-10-24,NordAqua Beverages
+1048,SKU1048,Pulse Lemon Can 330ml 8-pack,Sports & Isotonic,Isotonic,Pulse Lemon,Lemon,Isotonic,Can,Can 330ml 8-pack,330,8,2640,0,2019-04-23,NordAqua Beverages
+1049,SKU1049,Pulse Lemon PET 1.5L single,Sports & Isotonic,Isotonic,Pulse Lemon,Lemon,Isotonic,PET,PET 1.5L single,1500,1,1500,0,2019-01-23,NordAqua Beverages
+1050,SKU1050,Pulse Lemon PET 1L single,Sports & Isotonic,Isotonic,Pulse Lemon,Lemon,Isotonic,PET,PET 1L single,1000,1,1000,0,2022-10-03,NordAqua Beverages
+1051,SKU1051,Pulse Orange PET 1L single,Sports & Isotonic,Isotonic,Pulse Orange,Orange,Isotonic,PET,PET 1L single,1000,1,1000,0,2019-10-24,NordAqua Beverages
+1052,SKU1052,Pulse Orange Can 330ml 4-pack,Sports & Isotonic,Isotonic,Pulse Orange,Orange,Isotonic,Can,Can 330ml 4-pack,330,4,1320,0,2019-09-18,NordAqua Beverages
+1053,SKU1053,Bryga Peach Tea PET 1L single,RTD Tea & Coffee,Iced Tea,Bryga Peach Tea,Tea,Iced Tea,PET,PET 1L single,1000,1,1000,0,2024-01-26,NordAqua Beverages
+1054,SKU1054,Bryga Lemon Tea PET 1L single,RTD Tea & Coffee,Iced Tea,Bryga Lemon Tea,Tea,Iced Tea,PET,PET 1L single,1000,1,1000,0,2020-05-03,NordAqua Beverages
+1055,SKU1055,Bryga Lemon Tea Can 330ml single,RTD Tea & Coffee,Iced Tea,Bryga Lemon Tea,Tea,Iced Tea,Can,Can 330ml single,330,1,330,0,2021-10-04,NordAqua Beverages
+1056,SKU1056,Bryga Cold Brew Can 330ml 4-pack,RTD Tea & Coffee,Cold Brew Coffee,Bryga Cold Brew,Brew,Cold Brew Coffee,Can,Can 330ml 4-pack,330,4,1320,0,2019-09-17,NordAqua Beverages
+1057,SKU1057,Bryga Cold Brew Can 330ml single,RTD Tea & Coffee,Cold Brew Coffee,Bryga Cold Brew,Brew,Cold Brew Coffee,Can,Can 330ml single,330,1,330,0,2019-03-15,NordAqua Beverages
+1058,SKU1058,Bryga Cold Brew PET 1L single,RTD Tea & Coffee,Cold Brew Coffee,Bryga Cold Brew,Brew,Cold Brew Coffee,PET,PET 1L single,1000,1,1000,0,2019-05-05,NordAqua Beverages
+1059,SKU1059,Levande Kombucha Can 330ml single,Functional & Wellness,Kombucha,Levande Kombucha,Kombucha,Kombucha,Can,Can 330ml single,330,1,330,0,2021-02-02,NordAqua Beverages
+1060,SKU1060,Kilde Vitamin Can 330ml 8-pack,Functional & Wellness,Vitamin Water,Kilde Vitamin,Vitamin,Vitamin Water,Can,Can 330ml 8-pack,330,8,2640,1,2024-08-15,NordAqua Beverages

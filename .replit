@@ -1,0 +1,15 @@
+modules = ["python-3.12"]
+entrypoint = "malde/app/server.py"
+run = "python3 malde/app/server.py"
+
+[env]
+HOST = "0.0.0.0"
+PORT = "8137"
+
+[[ports]]
+localPort = 8137
+externalPort = 80
+
+[deployment]
+run = ["python3", "malde/app/server.py"]
+deploymentTarget = "cloudrun"

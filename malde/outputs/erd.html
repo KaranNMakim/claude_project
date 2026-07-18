@@ -1,0 +1,130 @@
+<!doctype html><html><head><meta charset="utf-8">
+<title>MALDE — RGM Entity-Relationship Diagram</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/10.9.1/mermaid.min.js"></script>
+<style>body{font-family:system-ui,sans-serif;margin:2rem;background:#0f1420;color:#e6e9ef}
+h1{font-weight:600} .mermaid{background:#fff;border-radius:12px;padding:1.5rem}</style>
+</head><body>
+<h1>MALDE — RGM star schema</h1>
+<p>Auto-generated from the live SQLite schema by <code>malde_toolkit.erd</code>.</p>
+<pre class="mermaid">
+erDiagram
+    dim_date {
+        int date_key PK
+        string week_start_date
+        string week_end_date
+        int iso_year
+        int iso_week
+        int month
+        int month_key
+        int quarter
+        int year
+        string half
+        string season
+    }
+    dim_product {
+        int product_key PK
+        string sku_code
+        string product_name
+        string category
+        string sub_category
+        string brand
+        string sub_brand
+        string flavour
+        string pack_type
+        string pack_description
+        int pack_size_ml
+        int units_per_pack
+        int total_volume_ml
+        int is_sugar_free
+        string launch_date
+        string brand_owner
+    }
+    dim_promotion {
+        int promo_key PK
+        string promo_name
+        string promo_mechanic
+        string funding_type
+        float typical_discount_depth_pct
+        string promo_objective
+    }
+    dim_region {
+        int region_key PK
+        string region_name
+        string country
+        string sub_region
+        string city_tier
+        string population_band
+    }
+    dim_retailer {
+        int retailer_key PK
+        string customer_name
+        string retail_group
+        string channel
+        string sub_channel
+        string country_hq
+        int loyalty_program
+    }
+    fact_finance {
+        int finance_id PK
+        int month_key
+        int product_key FK
+        int retailer_key FK
+        int units_sold
+        float list_price_eur
+        float cogs_per_unit_eur
+        float excise_duty_per_unit_eur
+        float gross_revenue_eur
+        float trade_investment_eur
+        float off_invoice_spend_eur
+        float on_invoice_spend_eur
+        float excise_duty_total_eur
+        float logistics_cost_eur
+        float net_revenue_eur
+        float gross_margin_eur
+        float gross_margin_pct
+    }
+    fact_promotion {
+        int promo_event_id PK
+        int promo_key FK
+        int product_key FK
+        int retailer_key FK
+        int region_key FK
+        int start_date_key FK
+        int end_date_key
+        float planned_discount_pct
+        float promo_price_eur
+        int planned_units
+        int display_flag
+        int feature_flag
+    }
+    fact_sales {
+        int sales_id PK
+        int date_key FK
+        int product_key FK
+        int retailer_key FK
+        int region_key FK
+        int units_sold
+        int base_units
+        int incremental_units
+        float gross_sales_value_eur
+        float avg_selling_price_eur
+        float base_price_eur
+        int promo_flag
+        int promo_key FK
+        float distribution_pct_acv
+    }
+    dim_retailer ||--o{ fact_finance : "retailer_key"
+    dim_product ||--o{ fact_finance : "product_key"
+    dim_date ||--o{ fact_promotion : "start_date_key"
+    dim_region ||--o{ fact_promotion : "region_key"
+    dim_retailer ||--o{ fact_promotion : "retailer_key"
+    dim_product ||--o{ fact_promotion : "product_key"
+    dim_promotion ||--o{ fact_promotion : "promo_key"
+    dim_promotion ||--o{ fact_sales : "promo_key"
+    dim_region ||--o{ fact_sales : "region_key"
+    dim_retailer ||--o{ fact_sales : "retailer_key"
+    dim_product ||--o{ fact_sales : "product_key"
+    dim_date ||--o{ fact_sales : "date_key"
+</pre>
+<script>mermaid.initialize({startOnLoad:true,theme:"default"});</script>
+</body></html>

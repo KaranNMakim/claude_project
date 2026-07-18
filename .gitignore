@@ -1,0 +1,10 @@
+# SQLite databases are built from data/csv on first boot (see app/server.py)
+malde/db/*.db
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# local tool settings
+.claude/settings.local.json

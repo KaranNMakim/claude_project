@@ -194,6 +194,8 @@
   <span class="badge"><span class="dot" id="watchDot"></span>
     watcher <span id="watchState">…</span></span>
   <span class="badge">db: <code id="activeDb">…</code></span>
+  <span class="badge" id="roBadge" style="display:none"
+        title="MALDE_READ_ONLY is set — apply/reset actions are disabled">🔒 read-only</span>
   <span class="spacer"></span>
   <button id="btnRunDry" class="primary">▶ Run pipeline (dry-run)</button>
   <button id="btnRunApply">▶ Run + apply fixes</button>
@@ -323,7 +325,12 @@
 const $ = (s) => document.querySelector(s);
 const api = async (path, opts) => {
   const r = await fetch(path, opts);
-  if (!r.ok) throw new Error((await r.text()) || r.statusText);
+  if (!r.ok) {
+    let msg = r.statusText;
+    try { const j = await r.json(); msg = j.detail || JSON.stringify(j); }
+    catch { /* non-JSON error body */ }
+    throw new Error(msg);
+  }
   return r.json();
 };
 const post = (path, body) => api(path, {
@@ -369,6 +376,18 @@ function renderStats() {
   $("#watchState").textContent = o.watcher.enabled
     ? `polling / ${o.watcher.interval_s}s` : "off";
   $("#watchDot").classList.toggle("off", !o.watcher.enabled);
+  $("#roBadge").style.display = o.read_only ? "" : "none";
+  const roTitle = "Disabled: this instance is read-only (MALDE_READ_ONLY)";
+  for (const [el, off] of [[$("#btnRunApply"), o.read_only],
+                           [$("#btnReset"), o.read_only],
+                           [$("#btnDemoCreate"), !o.demo_enabled],
+                           [$("#btnDemoAlter"), !o.demo_enabled],
+                           [$("#btnDemoDrop"), !o.demo_enabled]]) {
+    el.disabled = off; if (off) el.title = roTitle;
+  }
+  document.querySelectorAll('[data-heal][data-dry="0"]').forEach((b) => {
+    b.disabled = o.read_only; if (o.read_only) b.title = roTitle;
+  });
   const q = o.quality;
   $("#statCards").innerHTML = `
     <div class="card"><div class="label">Tables</div>

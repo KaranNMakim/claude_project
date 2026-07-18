@@ -60,6 +60,25 @@ STATIC_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "static")
 OUT_DIR = os.path.join(MALDE_ROOT, "outputs")
 WATCH_INTERVAL_S = 3.0
 
+# --- write protection (for public/hosted deployments) -----------------------
+# MALDE_READ_ONLY=1  blocks every endpoint that mutates the database
+# MALDE_ALLOW_DEMO=1 re-enables ONLY the demo schema-change buttons (they
+#                    touch a scratch staging table, so the watcher showcase
+#                    still works on a public instance)
+def _envflag(name: str) -> bool:
+    return os.environ.get(name, "").strip().lower() in ("1", "true", "yes")
+
+
+READ_ONLY = _envflag("MALDE_READ_ONLY")
+DEMO_ENABLED = (not READ_ONLY) or _envflag("MALDE_ALLOW_DEMO")
+
+
+def guard_write(what: str):
+    if READ_ONLY:
+        raise HTTPException(
+            403, f"Read-only mode: {what} is disabled on this instance. "
+                 "Unset MALDE_READ_ONLY (or run locally) to enable writes.")
+
 # ---------------------------------------------------------------------------
 # Event bus (SSE)
 # ---------------------------------------------------------------------------
@@ -313,6 +332,8 @@ def overview():
     return {
         "active_db": os.path.basename(T._ACTIVE["path"]),
         "is_working_copy": T._ACTIVE["path"] == WORKING_DB,
+        "read_only": READ_ONLY,
+        "demo_enabled": DEMO_ENABLED,
         "watcher": {"enabled": watcher.enabled,
                     "interval_s": watcher.interval,
                     "last_poll": watcher.last_poll},
@@ -377,6 +398,8 @@ async def heal(tool: str, request: Request):
     body = await request.json() if int(request.headers.get(
         "content-length") or 0) else {}
     dry_run = bool(body.get("dry_run", True))
+    if not dry_run:
+        guard_write("applying fixes")
 
     def _do():
         if not dry_run:
@@ -397,12 +420,16 @@ async def pipeline_run(request: Request):
     body = await request.json() if int(request.headers.get(
         "content-length") or 0) else {}
     apply = bool(body.get("apply", False))
+    if apply:
+        guard_write("apply mode (dry-run pipeline is still available)")
     run_bg(full_pipeline, apply)
     return {"status": "started", "mode": "apply" if apply else "dry_run"}
 
 
 @app.post("/api/db/reset")
 def db_reset():
+    guard_write("resetting the database")
+
     def _do():
         T.set_active_db(DEFAULT_DB_PATH)
         watcher.reset_baseline()
@@ -420,8 +447,17 @@ def db_reset():
 DEMO_TABLE = "stg_customer_feedback"
 
 
+def guard_demo():
+    if not DEMO_ENABLED:
+        raise HTTPException(
+            403, "Demo schema changes are disabled on this instance "
+                 "(set MALDE_ALLOW_DEMO=1 to enable them in read-only mode).")
+
+
 @app.post("/api/demo/create_table")
 def demo_create_table():
+    guard_demo()
+
     def _do():
         db = T._tools_db()
         db.execute(
@@ -435,6 +471,8 @@ def demo_create_table():
 
 @app.post("/api/demo/alter_table")
 def demo_alter_table():
+    guard_demo()
+
     def _do():
         db = T._tools_db()
         if DEMO_TABLE not in db.tables():
@@ -447,6 +485,8 @@ def demo_alter_table():
 
 @app.post("/api/demo/drop_table")
 def demo_drop_table():
+    guard_demo()
+
     def _do():
         db = T._tools_db()
         db.execute(f"DROP TABLE IF EXISTS {DEMO_TABLE}")

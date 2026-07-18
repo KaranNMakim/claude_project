@@ -5,6 +5,9 @@ run = "python3 malde/app/server.py"
 [env]
 HOST = "0.0.0.0"
 PORT = "8137"
+# public instance: block DB writes (apply/reset), keep the watcher demo alive
+MALDE_READ_ONLY = "1"
+MALDE_ALLOW_DEMO = "1"
 
 [[ports]]
 localPort = 8137

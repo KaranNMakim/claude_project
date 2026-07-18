@@ -1,4 +1,4 @@
-modules = ["python-3.12"]
+modules = ["python-3.12", "web"]
 entrypoint = "malde/app/server.py"
 run = "python3 malde/app/server.py"
 
@@ -16,3 +16,6 @@ externalPort = 80
 [deployment]
 run = ["python3", "malde/app/server.py"]
 deploymentTarget = "cloudrun"
+
+[nix]
+channel = "stable-25_05"

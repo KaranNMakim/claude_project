@@ -3,7 +3,8 @@
 [![Run on Replit](https://replit.com/badge/github/KaranNMakim/claude_project)](https://replit.com/new/github/KaranNMakim/claude_project)
 
 **Live demo:** <https://claudeproject--karanmakim1.replit.app>
-(read-only — dry-runs and the schema-watcher demo still work) ·
+(fully interactive — fixes apply to a working copy of the DB, and
+**Reset DB** restores the pristine state) ·
 [Replit workspace](https://replit.com/@karanmakim1/claudeproject)
 
 A working implementation of the agent taxonomy from *"Next-Generation Data
@@ -30,20 +31,19 @@ On **Replit**: click the badge above (or import this repo), then Run. The
 `.replit` config binds `0.0.0.0:8137` and the server builds the SQLite
 database from `malde/data/csv` automatically on first boot.
 
-### Write protection (hosted instances)
+### Write protection (optional)
 
-Two env vars control what visitors can do (both set in `.replit` for the
-public instance):
+The public demo is **fully interactive by default** — this is safe because
+apply-mode healing only ever writes to a working copy of the database
+(`malde_working.db`); the pristine `malde.db` and the CSVs it rebuilds from
+are never mutated, and **Reset DB** restores the initial state.
+
+To lock an instance down anyway, two opt-in env vars:
 
 | Env var | Effect |
 |---|---|
 | `MALDE_READ_ONLY=1` | Blocks every DB-mutating endpoint with HTTP 403: heal **Apply**, pipeline **apply mode**, and **Reset DB**. Dry-runs, profiling, quality suite, RCA and the ERD all still work. The UI shows a 🔒 read-only badge and disables the blocked buttons. |
-| `MALDE_ALLOW_DEMO=1` | In read-only mode, re-enables only the "Simulate new table / alter / drop" buttons — they touch a scratch staging table, so the schema-watcher showcase stays interactive without exposing real data to edits. Unset it to lock those down too. |
-
-Running locally without these vars set, everything is enabled. On a **Replit
-deployment** (`REPLIT_DEPLOYMENT` is set), both default to **on** even if the
-vars are missing, so a published instance is never writable by accident —
-set `MALDE_READ_ONLY=0` explicitly in the deployment's secrets to opt out.
+| `MALDE_ALLOW_DEMO=1` | In read-only mode, re-enables only the "Simulate new table / alter / drop" buttons — they touch a scratch staging table, so the schema-watcher showcase stays interactive on a locked-down instance. |
 
 Full documentation — dataset, agent architecture, toolkit, LLM agents —
 lives in [malde/README.md](malde/README.md) and

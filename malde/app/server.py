@@ -60,24 +60,21 @@ STATIC_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "static")
 OUT_DIR = os.path.join(MALDE_ROOT, "outputs")
 WATCH_INTERVAL_S = 3.0
 
-# --- write protection (for public/hosted deployments) -----------------------
+# --- write protection (opt-in, for hosted deployments) ----------------------
 # MALDE_READ_ONLY=1  blocks every endpoint that mutates the database
 # MALDE_ALLOW_DEMO=1 re-enables ONLY the demo schema-change buttons (they
 #                    touch a scratch staging table, so the watcher showcase
-#                    still works on a public instance)
-# When the vars are UNSET and we detect a Replit *deployment* (public URL),
-# both default to on — a published instance is never writable by accident.
-_IS_REPLIT_DEPLOYMENT = bool(os.environ.get("REPLIT_DEPLOYMENT"))
-
-
+#                    still works on a locked-down instance)
+# Writes are safe by design even when enabled: apply-mode healing only ever
+# touches a working copy (see ensure_working_copy); the pristine DB and the
+# CSVs it rebuilds from are never mutated, and Reset DB restores everything.
 def _envflag(name: str, default: bool = False) -> bool:
     v = os.environ.get(name, "").strip().lower()
     return default if v == "" else v in ("1", "true", "yes")
 
 
-READ_ONLY = _envflag("MALDE_READ_ONLY", default=_IS_REPLIT_DEPLOYMENT)
-DEMO_ENABLED = (not READ_ONLY) or _envflag("MALDE_ALLOW_DEMO",
-                                           default=_IS_REPLIT_DEPLOYMENT)
+READ_ONLY = _envflag("MALDE_READ_ONLY")
+DEMO_ENABLED = (not READ_ONLY) or _envflag("MALDE_ALLOW_DEMO")
 
 
 def guard_write(what: str):
